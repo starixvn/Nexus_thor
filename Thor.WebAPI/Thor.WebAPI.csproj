@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>47afe15a-3e3b-4abd-bea1-0c56df09aa4e</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="App_Data\SpNames.LOCAL.xml" />
+    <None Remove="App_Data\SpNames.PROD.xml" />
+    <None Remove="App_Data\SpNames.UAT.xml" />
+    <None Remove="App_Data\SpNames.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App_Data\SpNames.PROD.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\SpNames.UAT.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\SpNames.LOCAL.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\SpNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.1" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Thor.Core\Thor.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings - Copy %282%29.LOCAL.Development.json">
+      <DependentUpon>appsettings.LOCAL.Development.json</DependentUpon>
+    </Content>
+    <Content Update="appsettings - Copy %282%29.LOCAL.json">
+      <DependentUpon>appsettings.LOCAL.json</DependentUpon>
+    </Content>
+    <Content Update="appsettings - Copy - Copy.LOCAL.Development.json">
+      <DependentUpon>appsettings - Copy.LOCAL.Development.json</DependentUpon>
+    </Content>
+    <Content Update="appsettings - Copy - Copy.LOCAL.json">
+      <DependentUpon>appsettings - Copy.LOCAL.json</DependentUpon>
+    </Content>
+    <Content Update="appsettings - Copy.LOCAL.Development.json">
+      <DependentUpon>appsettings.LOCAL.Development.json</DependentUpon>
+    </Content>
+    <Content Update="appsettings - Copy.LOCAL.json">
+      <DependentUpon>appsettings.LOCAL.json</DependentUpon>
+    </Content>
+    <Content Update="appsettings - Copy.UAT.json">
+      <DependentUpon>appsettings.UAT.json</DependentUpon>
+    </Content>
+  </ItemGroup>
+
+</Project>
