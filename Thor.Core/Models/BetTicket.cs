@@ -9,6 +9,7 @@
         public string player_type { get; set; }
         public string transaction_date { get; set; }
         public string transaction_id { get; set; }
+        public string settlement_date { get; set; }
         public string brand { get; set; }
         public string brand_url { get; set; }
         public int game_code { get; set; }
