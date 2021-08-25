@@ -15,4 +15,6 @@ FROM registry.nexdev.net:5050/docker/dotnet/core/aspnet:5.0-buster-slim AS base
 WORKDIR /app
 COPY --from=builder /app .
 
+EXPOSE 5000
+
 ENTRYPOINT ["dotnet", "Thor.WebAPI.dll"]
