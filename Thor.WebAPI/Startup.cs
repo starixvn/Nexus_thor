@@ -81,13 +81,14 @@ namespace Thor.WebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Thor.WebAPI v1"));
             }
             else
             {
                 app.UseMiddleware<ErrorHandlingMiddleware>();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Thor.WebAPI v1"));
 
             app.UseHttpsRedirection();
 

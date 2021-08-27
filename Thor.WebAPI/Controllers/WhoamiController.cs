@@ -10,6 +10,8 @@
     {
         [Route("Whoami")]
         [AllowAnonymous]
+        [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Whoami()
         {
             return Content(GetWhoAmiContent(HttpContext));

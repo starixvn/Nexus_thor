@@ -43,7 +43,7 @@
                     from, to, return_rows, signature));
             }
 
-            if (!signature.Equals(brandConfig.Value.Salt, StringComparison.OrdinalIgnoreCase))
+            if (signature == null || !signature.Equals(brandConfig.Value.Salt, StringComparison.OrdinalIgnoreCase))
             {
                 logService.WriteLogFileInfo(string.Format("Unauthorized-{0}", signature));
                 return Unauthorized();
