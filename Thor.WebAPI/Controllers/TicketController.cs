@@ -50,7 +50,7 @@
             }
 
             TicketApiResponse ticketApiResponse;
-            if ((to-from).TotalDays > 180)
+            if ((to-from).TotalHours > 24)
             {
                 ticketApiResponse = GetResponseWhenInvalidParams();
             }
