@@ -20,8 +20,7 @@ RUN sed -i 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1/g' /usr/lib/ssl/openssl.
 WORKDIR /app
 COPY --from=builder /app .
 
-RUN apt-get update && apt-get install -yq \
-    telnet \
+RUN apt-get --allow-releaseinfo-change update && apt-get install -y telnet \
 	nano
 
 EXPOSE 5000
