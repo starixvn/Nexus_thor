@@ -13,6 +13,7 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.13.0" />
     <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.1.0-beta05" />
     <PackageReference Include="ONEbook.UM.Transport" Version="3.1.1" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Security.Cryptography;
+    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
@@ -43,7 +45,7 @@
                     from, to, return_rows, signature));
             }
 
-            if (signature == null || !signature.Equals(brandConfig.Value.Salt, StringComparison.OrdinalIgnoreCase))
+            if (!CheckSignature(from, to, signature))
             {
                 logService.WriteLogFileInfo(string.Format("Unauthorized-{0}", signature));
                 return Unauthorized();
@@ -79,6 +81,36 @@
             ticketApiResponse = AppendBrandInfo(ticketApiResponse);
 
             return Ok(ticketApiResponse);
+        }
+
+        private bool CheckSignature(DateTime from, DateTime to, string signature)
+        {
+            var isAuthorited = false;
+            if(signature != null)
+            {
+                var originText = from.ToString("yyyy-MM-dd hh:mm:ss") + to.ToString("yyyy-MM-dd hh:mm:ss") + brandConfig.Value.Salt;
+                var newSignature = CreateMD5Hash(originText);
+
+                isAuthorited = signature.Equals(newSignature, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return isAuthorited;
+        }
+
+        private string CreateMD5Hash(string input)
+        {
+            using (var md5 = MD5.Create())
+            {
+                byte[] inputBytes = Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
         }
 
         private TicketApiResponse AppendBrandInfo(TicketApiResponse ticketResponse)
