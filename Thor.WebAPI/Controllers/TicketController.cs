@@ -88,7 +88,7 @@
             var isAuthorited = false;
             if(signature != null)
             {
-                var originText = from.ToString("yyyy-MM-dd hh:mm:ss") + to.ToString("yyyy-MM-dd hh:mm:ss") + brandConfig.Value.Salt;
+                var originText = from.ToString("yyyy-MM-dd HH:mm:ss") + to.ToString("yyyy-MM-dd HH:mm:ss") + brandConfig.Value.Salt;
                 var newSignature = CreateMD5Hash(originText);
 
                 isAuthorited = signature.Equals(newSignature, StringComparison.OrdinalIgnoreCase);
