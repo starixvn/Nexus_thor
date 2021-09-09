@@ -13,7 +13,6 @@
     using Thor.Core.Models;
     using Thor.Core.Services;
 
-
     [ApiController]
     [Route("api/Ticket")]
     public class TicketController : ControllerBase
@@ -21,8 +20,10 @@
         private readonly IMaintenanceService maintenanceService;
         private readonly IBaseService baseService;
         private readonly IOptionsSnapshot<BrandConfig> brandConfig;
-
         private readonly ILogServiceExtend logService;
+
+        private readonly string dateFormat = "yyyy-MM-dd HH:mm:ss";
+        private readonly int MaxHourDateRange = 24;
 
         public TicketController(IMaintenanceService maintenanceService,
             IBaseService baseService,
@@ -41,7 +42,7 @@
             if (brandConfig.Value.IsWriteLog)
             {
                 logService.WriteLogFileInfo(
-                    string.Format("Params: form-{0}, to-{1}, return_rows-{2}, signature-{3}", 
+                    string.Format("Params: form-{0}, to-{1}, return_rows-{2}, signature-{3}",
                     from, to, return_rows, signature));
             }
 
@@ -52,7 +53,7 @@
             }
 
             TicketApiResponse ticketApiResponse;
-            if ((to-from).TotalHours > 24)
+            if ((to - from).TotalHours > MaxHourDateRange)
             {
                 ticketApiResponse = GetResponseWhenInvalidParams();
             }
@@ -86,9 +87,9 @@
         private bool CheckSignature(DateTime from, DateTime to, string signature)
         {
             var isAuthorited = false;
-            if(signature != null)
+            if (signature != null)
             {
-                var originText = from.ToString("yyyy-MM-dd HH:mm:ss") + to.ToString("yyyy-MM-dd HH:mm:ss") + brandConfig.Value.Salt;
+                var originText = from.ToString(dateFormat) + to.ToString(dateFormat) + brandConfig.Value.Salt;
                 var newSignature = CreateMD5Hash(originText);
 
                 isAuthorited = signature.Equals(newSignature, StringComparison.OrdinalIgnoreCase);
@@ -180,7 +181,7 @@
                     status = Status.Success,
                     message = string.Empty,
                     total_rows = criteria.TotalRows,
-                    data = betTickets
+                    data = FormatDateTime(betTickets)
                 };
             }
             else
@@ -200,6 +201,17 @@
             }
 
             return betTicketResponse;
+        }
+
+        private IEnumerable<BetTicket> FormatDateTime(IEnumerable<BetTicket> betTickets)
+        {
+            foreach (var ticket in betTickets)
+            {
+                ticket.transaction_date = DateTime.Parse(ticket.transaction_date).ToString(dateFormat);
+                ticket.settlement_date = DateTime.Parse(ticket.settlement_date).ToString(dateFormat);
+            }
+
+            return betTickets;
         }
 
         private bool IsUM()

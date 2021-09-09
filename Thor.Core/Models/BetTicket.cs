@@ -1,7 +1,5 @@
 ﻿namespace Thor.Core.Models
 {
-    using System;
-
     public class BetTicket
     {
         public string player_no { get; set; }
