@@ -8,19 +8,31 @@
 
   <ItemGroup>
     <None Remove="App_Data\SpNames.LOCAL.xml" />
+    <None Remove="App_Data\SpNames.LOCAL_1.xml" />
     <None Remove="App_Data\SpNames.PROD.xml" />
+    <None Remove="App_Data\SpNames.PROD_1.xml" />
     <None Remove="App_Data\SpNames.UAT.xml" />
+    <None Remove="App_Data\SpNames.UAT_1.xml" />
     <None Remove="App_Data\SpNames.xml" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="App_Data\SpNames.LOCAL_1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\SpNames.PROD.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\SpNames.PROD_1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\SpNames.UAT.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\SpNames.LOCAL.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\SpNames.UAT_1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\SpNames.xml">
@@ -43,20 +55,11 @@
     <Content Update="appsettings - Copy %282%29.LOCAL.Development.json">
       <DependentUpon>appsettings.LOCAL.Development.json</DependentUpon>
     </Content>
-    <Content Update="appsettings - Copy %282%29.LOCAL.json">
-      <DependentUpon>appsettings.LOCAL.json</DependentUpon>
-    </Content>
     <Content Update="appsettings - Copy - Copy.LOCAL.Development.json">
       <DependentUpon>appsettings - Copy.LOCAL.Development.json</DependentUpon>
     </Content>
-    <Content Update="appsettings - Copy - Copy.LOCAL.json">
-      <DependentUpon>appsettings - Copy.LOCAL.json</DependentUpon>
-    </Content>
     <Content Update="appsettings - Copy.LOCAL.Development.json">
       <DependentUpon>appsettings.LOCAL.Development.json</DependentUpon>
-    </Content>
-    <Content Update="appsettings - Copy.LOCAL.json">
-      <DependentUpon>appsettings.LOCAL.json</DependentUpon>
     </Content>
     <Content Update="appsettings - Copy.UAT.json">
       <DependentUpon>appsettings.UAT.json</DependentUpon>
