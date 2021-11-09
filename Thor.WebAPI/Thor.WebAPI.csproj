@@ -66,4 +66,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="logs\logs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
