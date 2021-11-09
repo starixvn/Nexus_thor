@@ -41,14 +41,14 @@
         {
             if (brandConfig.Value.IsWriteLog)
             {
-                logService.WriteLogFileWarning(
+                logService.WriteLogFileInfo(
                     string.Format("Params: form-{0}, to-{1}, return_rows-{2}, signature-{3}",
                     from, to, return_rows, signature));
             }
 
             if (!CheckSignature(from, to, signature))
             {
-                logService.WriteLogFileWarning(string.Format("Unauthorized-{0}", signature));
+                logService.WriteLogFileInfo(string.Format("Unauthorized-{0}", signature));
                 return Unauthorized();
             }
 
@@ -197,7 +197,7 @@
 
             if (brandConfig.Value.IsWriteLog)
             {
-                logService.WriteLogFileWarning(string.Format("TotalRows: {0}", criteria.TotalRows));
+                logService.WriteLogFileInfo(string.Format("TotalRows: {0}", criteria.TotalRows));
             }
 
             return betTicketResponse;
