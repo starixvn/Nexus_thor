@@ -2,6 +2,7 @@ namespace Thor.WebAPI
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
+    using NLog.Web;
 
     public static class Program
     {
@@ -16,6 +17,7 @@ namespace Thor.WebAPI
                 {
                     webBuilder.UseUrls($"http://*:5000");
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+            .UseNLog();
     }
 }
