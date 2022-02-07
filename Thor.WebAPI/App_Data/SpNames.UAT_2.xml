@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Functions>     
+  <Function Name="THOR API">
+    <Setting Key="Thor_API_BetTicket_Sel" SpName="Thor_API_BetTicket_Sel" DbName="DBPLO.bodb_Ploutos.bodbPloutosNet" Plain="0"></Setting>
+    
+  </Function>
+</Functions>
