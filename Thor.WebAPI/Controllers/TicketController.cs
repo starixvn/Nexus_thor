@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
     using System.Threading.Tasks;
@@ -14,7 +15,6 @@
     using Thor.Core.Services;
 
     [ApiController]
-    [Route("api/Ticket")]
     public class TicketController : ControllerBase
     {
         private readonly IMaintenanceService maintenanceService;
@@ -36,6 +36,44 @@
             this.logService = logService;
         }
 
+        [ThorAuth]
+        [Route("api/getTransactions")]
+        [HttpGet]
+        public async Task<IActionResult> GetTransactions(DateTime startDate, DateTime endDate, int page, int pageCount)
+        {
+            TicketApiResponse2 ticketApiResponse;
+            if ((endDate - startDate).TotalHours > MaxHourDateRange)
+            {
+                ticketApiResponse = GetErrorResponse(pageCount);
+            }
+            else
+            {
+                try
+                {
+                    if (IsUM())
+                    {
+                        ticketApiResponse = GetErrorResponse(pageCount);
+                    }
+                    else
+                    {
+                        ticketApiResponse = await GetSuccessTicketApiResponse2(startDate, endDate, page, pageCount);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ticketApiResponse = GetErrorResponse(pageCount);
+
+                    logService.WriteLogFileError(ex.ToString());
+                    await logService.WriteExceptionSentryErrorAsync(ex);
+                }
+            }
+
+            ticketApiResponse = AppendBrandInfo2(ticketApiResponse);
+
+            return Ok(ticketApiResponse);
+        }
+
+        [Route("api/Ticket")]
         [HttpGet]
         public async Task<IActionResult> Get(DateTime from, DateTime to, bool return_rows, string signature)
         {
@@ -122,6 +160,14 @@
             return ticketResponse;
         }
 
+        private TicketApiResponse2 AppendBrandInfo2(TicketApiResponse2 ticketResponse)
+        {
+            ticketResponse.operator_code = brandConfig.Value.OperatorCode;
+            ticketResponse.provider_code = brandConfig.Value.ProviderCode;
+            ticketResponse.aggregator_code = brandConfig.Value.AggregatorCode;
+            return ticketResponse;
+        }
+
         private TicketApiResponse GetResponseWhenInvalidParams()
         {
             var ticketResponse = new TicketApiResponse
@@ -130,6 +176,19 @@
                 message = BrandMessages.GetExceedDateRangeMessage(brandConfig.Value.BrandCode),
                 total_rows = 0,
                 data = new List<BetTicket>()
+            };
+
+            return ticketResponse;
+        }
+
+        private TicketApiResponse2 GetErrorResponse(int pageCount)
+        {
+            var ticketResponse = new TicketApiResponse2
+            {
+                success = 0,
+                page_count = pageCount,
+                result_count = 0,
+                game_transactions = new List<BetTicket2>()
             };
 
             return ticketResponse;
@@ -159,6 +218,32 @@
             };
 
             return ticketResponse;
+        }
+
+        private async Task<TicketApiResponse2> GetSuccessTicketApiResponse2(DateTime startDate, DateTime endDate, int page, int pageCount)
+        {
+            TicketApiResponse2 betTicketResponse;
+            var criteria = new GetBetTicket2Criteria
+            {
+                BrandCode = brandConfig.Value.BrandCode,
+                FromDate = startDate,
+                ToDate = endDate,
+                IsReturnRows = true,
+                Page = page,
+                PageCount = pageCount,
+                IsTest = brandConfig.Value.IsTest,
+            };
+
+            var betTickets = await baseService.GetDataAsync<BetTicket2>(criteria);
+            betTicketResponse = new TicketApiResponse2
+            {
+                success = 1,
+                page_count = pageCount,
+                result_count = betTickets.ToList().Count,
+                game_transactions = FormatDateTime2(betTickets)
+            };
+
+            return betTicketResponse;
         }
 
         private async Task<TicketApiResponse> GetSuccessTicketApiResponse(DateTime from, DateTime to, bool return_rows)
@@ -204,6 +289,17 @@
         }
 
         private IEnumerable<BetTicket> FormatDateTime(IEnumerable<BetTicket> betTickets)
+        {
+            foreach (var ticket in betTickets)
+            {
+                ticket.transaction_date = DateTime.Parse(ticket.transaction_date).ToString(dateFormat);
+                ticket.settlement_date = DateTime.Parse(ticket.settlement_date).ToString(dateFormat);
+            }
+
+            return betTickets;
+        }
+
+        private IEnumerable<BetTicket2> FormatDateTime2(IEnumerable<BetTicket2> betTickets)
         {
             foreach (var ticket in betTickets)
             {
